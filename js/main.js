@@ -28,6 +28,7 @@ function load(questions, randomIndexes) {
   quiz_body.innerHTML += `<div class="options"></div>`;
   options = document.querySelector(".options");
   let style = document.createElement("style");
+  style.innerHTML = ``;
   style.innerHTML = `
   .bulltes span:nth-of-type(${counter}) {
     height: 20px;
