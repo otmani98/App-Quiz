@@ -1,4 +1,5 @@
 let score = 0;
+let counter = 1;
 
 //get data from json
 async function getquizobj() {
@@ -14,7 +15,6 @@ async function datermineQuestions(level) {
   let randomIndexes = generateRandom(questions);
   return load(questions, randomIndexes);
 }
-
 //shows questions
 function load(questions, randomIndexes) {
   function* genNumbers() {
@@ -23,10 +23,19 @@ function load(questions, randomIndexes) {
   let gen = genNumbers();
   let question = questions[gen.next().value];
   quiz_body = document.querySelector(".quiz_body");
-  quiz_body.innerHTML = ``;
+  quiz_body.innerHTML = `<div class="bulltes"> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> </div>`;
   quiz_body.innerHTML += `<p class="q">${question["question"]}</p>`;
   quiz_body.innerHTML += `<div class="options"></div>`;
   options = document.querySelector(".options");
+  let style = document.createElement("style");
+  style.innerHTML = `
+  .bulltes span:nth-of-type(${counter}) {
+    height: 20px;
+    width: 20px;
+    background-color: #2c7fdd;
+  }
+  `;
+  document.head.appendChild(style);
   options.innerHTML += `<div class="option">
   <input type="radio" name="opt" id="A" value="A" />
   <label for="A"
@@ -54,16 +63,19 @@ function load(questions, randomIndexes) {
   </div>`;
   }
   quiz_body.innerHTML += `<div class="timer">00:<span class="timerp">55</span></div>`;
-  timer = document.querySelector(".timerp");
 
   //timer
-  timerofQ(timer);
+  let timerp = document.querySelector(".timerp");
+  let input = document.getElementById("A");
+  timer(timerp, input);
 
   //go to the next question after click in any option
   let radio = document.querySelectorAll("[type='radio']");
   radio.forEach((element) => {
     element.addEventListener("change", function (e) {
       if (e.target.checked) {
+        style.innerHTML = ``;
+        counter++;
         if (e.target.value === question["answer"]) {
           score++;
         }
@@ -72,7 +84,7 @@ function load(questions, randomIndexes) {
             return show_result();
           }
           randomIndexes.shift();
-          return load(questions, randomIndexes);
+          load(questions, randomIndexes);
         }, 300);
       }
     });
@@ -97,6 +109,7 @@ function show_result() {
   let again = document.getElementById("again");
   again.onclick = function () {
     score = 0;
+    counter = 1;
     levelchoosen();
   };
 }
@@ -157,15 +170,13 @@ function generateRandom(array) {
 }
 
 //timer
-function timerofQ(timerp) {
-  input = document.getElementById("A");
-  let counter = setInterval(countdown, 1000);
-  function countdown() {
+function timer(timerp, input, x = 1000) {
+  setInterval(function () {
     timerp.innerHTML -= 1;
     timerp.innerHTML = timerp.innerHTML.toString().padStart(2, "0");
     if (timerp.innerHTML === "00") {
-      input.value = "x";
+      input.value = "";
       input.click();
     }
-  }
+  }, x);
 }
