@@ -27,8 +27,10 @@ function load(questions, randomIndexes) {
   quiz_body.innerHTML += `<p class="q">${question["question"]}</p>`;
   quiz_body.innerHTML += `<div class="options"></div>`;
   options = document.querySelector(".options");
+
+  clearbullets();
   let style = document.createElement("style");
-  style.innerHTML = ``;
+  style.id = "forbullet";
   style.innerHTML = `
   .bulltes span:nth-of-type(${counter}) {
     height: 20px;
@@ -75,7 +77,7 @@ function load(questions, randomIndexes) {
   radio.forEach((element) => {
     element.addEventListener("change", function (e) {
       if (e.target.checked) {
-        style.innerHTML = ``;
+        clearbullets();
         counter++;
         if (e.target.value === question["answer"]) {
           score++;
@@ -111,6 +113,7 @@ function show_result() {
   again.onclick = function () {
     score = 0;
     counter = 1;
+    clearbullets();
     levelchoosen();
   };
 }
@@ -180,4 +183,11 @@ function timer(timerp, input, x = 1000) {
       input.click();
     }
   }, x);
+}
+
+//clear bulltes from styling
+function clearbullets() {
+  if (!!document.getElementById("forbullet")) {
+    document.getElementById("forbullet").remove();
+  }
 }
