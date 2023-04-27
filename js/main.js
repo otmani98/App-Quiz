@@ -23,19 +23,14 @@ start.onclick = function () {
 
 //choosing the level of user
 function levelchoosen() {
-  quiz_body.innerHTML = `<p class="q">What level do you think you are in?</p>
-  <div class="option">
-    <input type="radio" name="level" id="b" value="level1" />
-    <label for="b">Beginner</label>
-  </div>
-  <div class="option">
-    <input type="radio" name="level" id="i" value="level2" />
-    <label for="i">Intermediate</label>
-  </div>
-  <div class="option">
-    <input type="radio" name="level" id="a" value="level3" />
-    <label for="a">Advanced</label>
+  let levels = ["Beginner", "Intermediate", "Advanced"];
+  quiz_body.innerHTML = '<p class="q">What level do you think you are in?</p>';
+  for (let i = 0; i < levels.length; i++) {
+    quiz_body.innerHTML += `<div class="option">
+    <input type="radio" name="level" id="${levels[i]}" value="level${i + 1}" />
+    <label for="${levels[i]}">${levels[i]}</label>
   </div>`;
+  }
 
   document.querySelectorAll("[type='radio']").forEach((element) => {
     element.addEventListener("change", function (e) {
